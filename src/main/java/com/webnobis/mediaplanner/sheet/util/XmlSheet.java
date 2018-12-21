@@ -1,5 +1,6 @@
 package com.webnobis.mediaplanner.sheet.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -71,16 +72,20 @@ public class XmlSheet {
 	 * @return the sheetElements
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
 	 */
-	public Iterable<Element> getElements() throws InstantiationException, IllegalAccessException {
+	public Iterable<Element> getElements() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		Element element;
 		List<Element> elements = new ArrayList<Element>(mSheetElements.size());
 		for (XmlSheetElement xmlElement : mSheetElements) {
-			element = xmlElement.getElementClass().newInstance();
+			element = xmlElement.getElementClass().getDeclaredConstructor().newInstance();
 			for (XmlPosition position : xmlElement.getPositions()) {
 				element.getPositions().add(Math.min(position.getId(), element.getPositions().size()), new XY(position.getX(), position.getY()));
 			}
-			if (element.isDescribable()) {
+			if (element.isDescribable() && xmlElement.getDescriptions() != null) {
 				element.getDescriptions().clear();
 				for (XmlDescription description : xmlElement.getDescriptions()) {
 					element.getDescriptions().add(Math.min(description.getId(), element.getDescriptions().size()), new Description(description.getKey(), description.getValue()));

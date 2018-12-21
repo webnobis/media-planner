@@ -28,7 +28,7 @@ public abstract class Msg {
 			if (index < 0) {
 				continue;
 			}
-			sb.replace(index, index + pk.length(), pParameters[i].toString());
+			sb.replace(index, index + pk.length(), String.valueOf(pParameters[i]));
 		}
 		return sb.toString();
 	}
