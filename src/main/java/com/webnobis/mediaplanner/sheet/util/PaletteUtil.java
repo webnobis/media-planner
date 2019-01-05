@@ -11,14 +11,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webnobis.mediaplanner.element.Element;
 import com.webnobis.mediaplanner.element.palette.Group;
 
 public abstract class PaletteUtil {
 
-	private static final Logger sLog = Logger.getLogger(PaletteUtil.class);
+	private static final Logger sLog = LoggerFactory.getLogger(PaletteUtil.class);
 
 	private static final Comparator<Element> sComparator = new PaletteComparator();
 
@@ -70,7 +71,7 @@ public abstract class PaletteUtil {
 			}
 			for (Class<Element> c : classes) {
 				try {
-					elements.add(c.newInstance());
+					elements.add(c.getConstructor().newInstance());
 				} catch (Exception e) {
 					sLog.error("couldn't create " + pPalette.name().toLowerCase() + " element from class " + c.getName(), e);
 				}

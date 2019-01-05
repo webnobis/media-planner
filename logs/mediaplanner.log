@@ -1,0 +1,9 @@
+2019-01-05 20:01:19.686 [AWT-EventQueue-0] WARN  com.webnobis.mediaplanner.sheet.util.PaletteUtil - no elements found for palette ANTENNA
+2019-01-05 20:01:25.393 [AWT-EventQueue-0] WARN  com.webnobis.mediaplanner.sheet.util.PaletteUtil - no elements found for palette POWER
+2019-02-05 20:02:59.807 [AWT-EventQueue-0] WARN  com.webnobis.mediaplanner.sheet.util.PaletteUtil - no elements found for palette POWER
+2019-47-05 20:47:30.423 [AWT-EventQueue-0] WARN  com.webnobis.mediaplanner.sheet.util.PaletteUtil - no elements found for palette POWER
+2019-49-05 20:49:36.092 [AWT-EventQueue-0] WARN  com.webnobis.mediaplanner.sheet.util.PaletteUtil - no elements found for palette POWER
+2019-50-05 20:50:16.369 [AWT-EventQueue-0] WARN  com.webnobis.mediaplanner.sheet.util.PaletteUtil - no elements found for palette POWER
+2019-54-05 20:54:21.172 [main] INFO  com.webnobis.mediaplanner.sheet.util.SheetTransformer - '/tmp/SheetTransformerImgTest5163930448827567289.png' with 744x992 pixels stored
+2019-54-05 20:54:21.366 [main] INFO  com.webnobis.mediaplanner.sheet.util.SheetTransformer - '/tmp/SheetTransformerImgTest6405524942890027435.gif' with 744x992 pixels stored
+2019-54-05 20:54:21.419 [main] INFO  com.webnobis.mediaplanner.sheet.util.SheetTransformer - '/tmp/SheetTransformerImgTest11094587828054722055.jpg' with 744x992 pixels stored

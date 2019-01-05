@@ -1,6 +1,7 @@
 package com.webnobis.mediaplanner.element.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webnobis.mediaplanner.element.Element;
 import com.webnobis.mediaplanner.element.ElementException;
@@ -10,7 +11,7 @@ import com.webnobis.mediaplanner.sheet.util.Constants;
 
 public class PaintUtil {
 
-	private static final Logger sLog = Logger.getLogger(PaintUtil.class);
+	private static final Logger sLog = LoggerFactory.getLogger(PaintUtil.class);
 
 	private static enum Parameter {
 		X, Y, WIDTH, HEIGHT, X_CENTER, Y_CENTER

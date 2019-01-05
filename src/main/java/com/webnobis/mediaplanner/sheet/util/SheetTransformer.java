@@ -19,7 +19,8 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
 import javax.xml.bind.JAXB;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webnobis.mediaplanner.element.Element;
 
@@ -51,7 +52,7 @@ public class SheetTransformer {
 	 */
 	public static final Color IMG_BACKGROUND = Color.WHITE;
 
-	private static final Logger sLog = Logger.getLogger(SheetTransformer.class);
+	private static final Logger sLog = LoggerFactory.getLogger(SheetTransformer.class);
 
 	private static final char DOT = '.';
 

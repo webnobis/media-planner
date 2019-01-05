@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.management.ManagementFactory;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.JarEntry;
@@ -68,7 +67,7 @@ public class ClassFinder {
 		Set<String> classNames = new HashSet<String>();
 		String packageName = pPackage.getName();
 		String packagePath = packageName.replace(DOT, PATH);
-		String classPath = ManagementFactory.getRuntimeMXBean().getClassPath();
+		String classPath = System.getProperty("jdk.module.path");
 		if (classPath.contains(File.pathSeparator)) {
 			for (String path : classPath.split(File.pathSeparator)) {
 				addClassesFromPackage(path, packagePath, packageName, classNames);

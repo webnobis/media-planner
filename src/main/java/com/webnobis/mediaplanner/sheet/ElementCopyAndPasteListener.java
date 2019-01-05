@@ -9,7 +9,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webnobis.mediaplanner.element.Element;
 import com.webnobis.mediaplanner.element.ElementException;
@@ -20,7 +21,7 @@ import com.webnobis.mediaplanner.sheet.util.Msg;
 
 public class ElementCopyAndPasteListener extends MouseAdapter {
 
-	private static final Logger sLog = Logger.getLogger(ElementCopyAndPasteListener.class);
+	private static final Logger sLog = LoggerFactory.getLogger(ElementCopyAndPasteListener.class);
 
 	private Element mElement;
 
