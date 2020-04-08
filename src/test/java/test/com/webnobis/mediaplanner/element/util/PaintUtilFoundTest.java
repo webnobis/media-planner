@@ -1,10 +1,10 @@
 package test.com.webnobis.mediaplanner.element.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.Graphics2D;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.webnobis.mediaplanner.element.AbstractElement;
 import com.webnobis.mediaplanner.element.Element;
@@ -17,7 +17,7 @@ import com.webnobis.mediaplanner.sheet.util.Constants;
  * @author steffen
  * @version 1.00
  */
-public class PaintUtilFoundTest {
+class PaintUtilFoundTest {
 
 	private static final int MAX_X_OR_Y = 50;
 
@@ -29,7 +29,7 @@ public class PaintUtilFoundTest {
 			+ 1, MAX_X_OR_Y + Constants.LINE_FOUND_SIZE + 1, MAX_X_OR_Y + Constants.LINE_FOUND_SIZE + 1);
 
 	@Test
-	public void testFoundModule() {
+	void testFoundModule() {
 		int foundCount = 0;
 		for (int x = 0; x <= MAX_X_OR_Y; x++) {
 			for (int y = 0; y <= MAX_X_OR_Y; y++) {
@@ -44,7 +44,7 @@ public class PaintUtilFoundTest {
 	}
 
 	@Test
-	public void testFoundLine() {
+	void testFoundLine() {
 		int foundCount1 = 0;
 		int foundCount2 = 0;
 		for (int x = 0; x <= MAX_X_OR_Y; x++) {

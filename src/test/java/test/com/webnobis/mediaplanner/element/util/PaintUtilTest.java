@@ -1,17 +1,13 @@
 package test.com.webnobis.mediaplanner.element.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.awt.Graphics2D;
+import java.util.Arrays;
 
-import org.junit.Test;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.webnobis.mediaplanner.element.AbstractElement;
 import com.webnobis.mediaplanner.element.Element;
@@ -25,8 +21,7 @@ import com.webnobis.mediaplanner.sheet.util.Constants;
  * @author steffen
  * @version 1.00
  */
-@RunWith(Theories.class)
-public class PaintUtilTest {
+class PaintUtilTest {
 
 	private static final XY FIRST = new XY(200, 120);
 
@@ -46,22 +41,18 @@ public class PaintUtilTest {
 
 	private static final int Y = 1020;
 
-	@DataPoints
-	public static final Element[] sElements = { null, new TestLine(FIRST, SECOND, NEXT), new TestLine(FIRST), new TestElement(FIRST, SECOND), new TestElement(FIRST), new TestElement() };
+	private static final Element[] sElements = { null, new TestLine(FIRST, SECOND, NEXT), new TestLine(FIRST), new TestElement(FIRST, SECOND), new TestElement(FIRST), new TestElement() };
 
-	@Theory
-	public void testIsPaintable(Element pElement) {
-		// only 1, 2 and 3 are correct filled
-		assertEquals(PaintUtil.isPaintable(pElement), sElements[1] == pElement || sElements[2] == pElement || sElements[3] == pElement);
+	@Test
+	void testIsPaintable() {
+		assertTrue(PaintUtil.isPaintable(sElements[1]));
+		assertFalse(PaintUtil.isPaintable(sElements[0]));
 	}
 
-	@Theory
-	public void testGetX(Element pElement) {
-		if (sElements[1] == pElement || sElements[2] == pElement || sElements[3] == pElement) {
-			assertEquals(FIRST.getX(), PaintUtil.getX(pElement));
-		} else {
-			assertEquals(0, PaintUtil.getX(pElement));
-		}
+	@Test
+	void testGetX() {
+		assertEquals(FIRST.getX(), PaintUtil.getX(sElements[1]));
+		assertEquals(0, PaintUtil.getX(sElements[5]));
 	}
 
 	@Theory
