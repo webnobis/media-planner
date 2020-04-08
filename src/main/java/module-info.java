@@ -1,10 +1,15 @@
 module com.webnobis.mediaplanner {
 	
 	requires java.base;
-	requires java.desktop;
-	requires java.xml.bind;
 	
 	requires org.slf4j;
+	
+	requires java.xml.bind;
+	
+	requires javafx.base;
+	requires javafx.controls;
+	requires javafx.graphics;
+	requires javafx.swing;
 
 	exports com.webnobis.mediaplanner;
 	

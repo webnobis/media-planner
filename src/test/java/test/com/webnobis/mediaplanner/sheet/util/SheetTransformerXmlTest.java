@@ -43,9 +43,6 @@ public class SheetTransformerXmlTest {
 	@DataPoints
 	public static final ElementList[] sElementLists = new ElementList[10];
 
-	@DataPoints
-	public static final File[] sXmlFiles = new File[sElementLists.length];
-
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -101,14 +98,10 @@ public class SheetTransformerXmlTest {
 	 */
 	@Theory
 	public void testStoreElements(ElementList pElementList) throws NullPointerException, IOException {
-		for (int i = 0; i < sElementLists.length; i++) {
-			if (pElementList == sElementLists[i]) {
-				sXmlFiles[i] = File.createTempFile(SheetTransformerXmlTest.class.getSimpleName(), TMP_FILE_EXT);
-				sXmlFiles[i] = SheetTransformer.storeElements(new TestComponent(), pElementList, sXmlFiles[i]);
-				assertTrue(sXmlFiles[i].getName(), sXmlFiles[i].length() > 0);
-				break;
-			}
-		}
+		File sXmlFile = File.createTempFile(SheetTransformerXmlTest.class.getSimpleName(), TMP_FILE_EXT);
+		sXmlFile = SheetTransformer.storeElements(new TestComponent(), pElementList, sXmlFile);
+		assertTrue(sXmlFile.getName(), sXmlFile.length() > 0);
+		testLoadElements(sXmlFile);
 	}
 
 	/**
@@ -117,8 +110,7 @@ public class SheetTransformerXmlTest {
 	 * @throws IOException
 	 * @throws NullPointerException
 	 */
-	@Theory
-	public void testLoadElements(File pXmlFile) throws NullPointerException, IOException {
+	private void testLoadElements(File pXmlFile) throws NullPointerException, IOException {
 		ElementList elementList = new ElementList();
 		for (Element element : SheetTransformer.loadElements(pXmlFile).getElements()) {
 			elementList.add(element);
