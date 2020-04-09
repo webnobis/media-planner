@@ -3,23 +3,22 @@
  */
 package test.com.webnobis.mediaplanner.sheet.util;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Component;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.webnobis.mediaplanner.element.Describable;
 import com.webnobis.mediaplanner.element.Description;
@@ -35,19 +34,17 @@ import com.webnobis.mediaplanner.sheet.util.SheetTransformer;
  * @author steffen
  * @version 1.00
  */
-@RunWith(Theories.class)
-public class SheetTransformerXmlTest {
+class SheetTransformerXmlTest {
 
 	public static final String TMP_FILE_EXT = ".tmp";
 
-	@DataPoints
-	public static final ElementList[] sElementLists = new ElementList[10];
+	private static final ElementList[] sElementLists = new ElementList[10];
 
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@BeforeClass
-	public static void setUpClass() throws Exception {
+	@BeforeAll
+	static void setUpClass() throws Exception {
 		int x = 0;
 		int y = 0;
 		Element element;
@@ -83,29 +80,35 @@ public class SheetTransformerXmlTest {
 		}
 	}
 
-	@AfterClass
-	public static void tearDownClass() throws Exception {
-		for (File file : File.createTempFile(SheetTransformerXmlTest.class.getSimpleName(), TMP_FILE_EXT).getParentFile().listFiles(new TestFileFilter())) {
+	@AfterAll
+	static void tearDownClass() throws Exception {
+		for (File file : File.createTempFile(SheetTransformerXmlTest.class.getSimpleName(), TMP_FILE_EXT)
+				.getParentFile().listFiles(new TestFileFilter())) {
 			file.delete();
 		}
 	}
 
 	/**
-	 * Test method for {@link com.webnobis.mediaplanner.sheet.util.SheetTransformer#storeElements(com.webnobis.mediaplanner.sheet.util.ElementList, java.io.File)}.
-	 * 
-	 * @throws IOException
-	 * @throws NullPointerException
+	 * Test method for
+	 * {@link com.webnobis.mediaplanner.sheet.util.SheetTransformer#storeElements(com.webnobis.mediaplanner.sheet.util.ElementList, java.io.File)}.
 	 */
-	@Theory
-	public void testStoreElements(ElementList pElementList) throws NullPointerException, IOException {
-		File sXmlFile = File.createTempFile(SheetTransformerXmlTest.class.getSimpleName(), TMP_FILE_EXT);
-		sXmlFile = SheetTransformer.storeElements(new TestComponent(), pElementList, sXmlFile);
-		assertTrue(sXmlFile.getName(), sXmlFile.length() > 0);
-		testLoadElements(sXmlFile);
+	@Test
+	void testStoreElements() {
+		Arrays.stream(sElementLists).forEach(pElementList -> {
+			try {
+				File sXmlFile = File.createTempFile(SheetTransformerXmlTest.class.getSimpleName(), TMP_FILE_EXT);
+				sXmlFile = SheetTransformer.storeElements(new TestComponent(), pElementList, sXmlFile);
+				assertTrue(sXmlFile.length() > 0);
+				testLoadElements(sXmlFile);
+			} catch (IOException e) {
+				throw new UncheckedIOException(e);
+			}
+		});
 	}
 
 	/**
-	 * Test method for {@link com.webnobis.mediaplanner.sheet.util.SheetTransformer#loadElements(java.io.File)}.
+	 * Test method for
+	 * {@link com.webnobis.mediaplanner.sheet.util.SheetTransformer#loadElements(java.io.File)}.
 	 * 
 	 * @throws IOException
 	 * @throws NullPointerException
@@ -125,24 +128,27 @@ public class SheetTransformerXmlTest {
 		assertTrue(found);
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testLoadElementsNull() throws NullPointerException, IOException {
-		SheetTransformer.loadElements(null);
+	@Test
+	void testLoadElementsNull() {
+		assertThrows(NullPointerException.class, () -> SheetTransformer.loadElements(null));
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testStoreElementsComponentNull() throws NullPointerException, IOException {
-		SheetTransformer.storeElements(null, new ArrayList<Element>(), new File(""));
+	@Test
+	void testStoreElementsComponentNull() {
+		assertThrows(NullPointerException.class,
+				() -> SheetTransformer.storeElements(null, new ArrayList<Element>(), new File("")));
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testStoreElementsElementsNull() throws NullPointerException, IOException {
-		SheetTransformer.storeElements(new TestComponent(), null, new File(""));
+	@Test
+	void testStoreElementsElementsNull() {
+		assertThrows(NullPointerException.class,
+				() -> SheetTransformer.storeElements(new TestComponent(), null, new File("")));
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testStoreElementsFileNull() throws NullPointerException, IOException {
-		SheetTransformer.storeElements(new TestComponent(), new ArrayList<Element>(), null);
+	@Test
+	void testStoreElementsFileNull() throws NullPointerException, IOException {
+		assertThrows(NullPointerException.class,
+				() -> SheetTransformer.storeElements(new TestComponent(), new ArrayList<Element>(), null));
 	}
 
 	@SuppressWarnings("serial")

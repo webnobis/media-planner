@@ -3,7 +3,10 @@ package com.webnobis.mediaplanner.element.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.webnobis.mediaplanner.element.Description;
 
@@ -22,13 +25,9 @@ public class DescriptionList extends ArrayList<Description> {
 	 * @param pAllowedKeys
 	 */
 	public DescriptionList(int pMaxCount, String[] pAllowedKeys) {
-		super();
+		super(pMaxCount);
 		mMaxCount = pMaxCount;
-		if (pAllowedKeys == null || pAllowedKeys.length < 1) {
-			mAllowedKeys = null;
-		} else {
-			mAllowedKeys = Arrays.asList(pAllowedKeys);
-		}
+		mAllowedKeys = Optional.ofNullable(pAllowedKeys).map(Arrays::asList).orElse(Collections.emptyList());
 	}
 
 	/**
@@ -50,7 +49,9 @@ public class DescriptionList extends ArrayList<Description> {
 	 */
 	@Override
 	public boolean add(Description pDescription) {
-		return this.addAll(Arrays.asList(new Description[] { pDescription }));
+		int size = size();
+		add(size, pDescription);
+		return size < size();
 	}
 
 	/**
@@ -58,7 +59,10 @@ public class DescriptionList extends ArrayList<Description> {
 	 */
 	@Override
 	public void add(int pIndex, Description pDescription) {
-		this.addAll(pIndex, Arrays.asList(new Description[] { pDescription }));
+		if (Optional.ofNullable(pDescription).filter(unused -> size() < mMaxCount).map(Description::getKey)
+				.filter(mAllowedKeys::contains).isPresent()) {
+			super.add(pIndex, pDescription);
+		}
 	}
 
 	/**
@@ -66,7 +70,7 @@ public class DescriptionList extends ArrayList<Description> {
 	 */
 	@Override
 	public boolean addAll(Collection<? extends Description> pCol) {
-		return this.addAll(super.size(), pCol);
+		return addAll(size(), pCol);
 	}
 
 	/**
@@ -74,29 +78,12 @@ public class DescriptionList extends ArrayList<Description> {
 	 */
 	@Override
 	public boolean addAll(int pIndex, Collection<? extends Description> pCol) {
-		boolean added = true;
-		int index = pIndex;
-		for (Description d : pCol) {
-			if (d == null || mMaxCount <= super.size() || (mAllowedKeys != null && !mAllowedKeys.contains(d.getKey()))) {
-				added = false;
-				break;
-			}
-			super.add(index++, d);
-		}
-		return added;
-	}
-
-	/**
-	 * @see java.util.ArrayList#set(int, java.lang.Object)
-	 */
-	@Override
-	public Description set(int pIndex, Description pDescription) {
-		Description d = super.remove(pIndex);
-		if (this.addAll(pIndex, Arrays.asList(new Description[] { pDescription }))) {
-			return d;
+		if (pCol != null) {
+			int limit = mMaxCount - size();
+			return super.addAll(pIndex, pCol.stream().filter(e -> e != null)
+					.filter(e -> mAllowedKeys.contains(e.getKey())).limit(limit).collect(Collectors.toList()));
 		} else {
-			super.set(pIndex, d); // roll back
-			return null;
+			return false;
 		}
 	}
 

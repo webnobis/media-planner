@@ -1,13 +1,13 @@
 package com.webnobis.mediaplanner.element.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import com.webnobis.mediaplanner.element.XY;
 
 public class PositionList extends ArrayList<XY> {
-
+	
 	private static final long serialVersionUID = 1L;
 
 	private final int mMaxCount;
@@ -18,7 +18,7 @@ public class PositionList extends ArrayList<XY> {
 	 * @param pMaxCount
 	 */
 	public PositionList(int pMaxCount) {
-		super();
+		super(pMaxCount);
 		mMaxCount = pMaxCount;
 	}
 
@@ -29,57 +29,32 @@ public class PositionList extends ArrayList<XY> {
 		return mMaxCount;
 	}
 
-	/**
-	 * @see java.util.ArrayList#add(java.lang.Object)
-	 */
 	@Override
-	public boolean add(XY pXY) {
-		return this.addAll(Arrays.asList(new XY[] { pXY }));
+	public boolean add(XY element) {
+		int size = size();
+		add(size, element);
+		return size < size();
 	}
 
-	/**
-	 * @see java.util.ArrayList#add(int, java.lang.Object)
-	 */
 	@Override
-	public void add(int pIndex, XY pXY) {
-		this.addAll(pIndex, Arrays.asList(new XY[] { pXY }));
-	}
-
-	/**
-	 * @see java.util.ArrayList#addAll(java.util.Collection)
-	 */
-	@Override
-	public boolean addAll(Collection<? extends XY> pCol) {
-		return this.addAll(super.size(), pCol);
-	}
-
-	/**
-	 * @see java.util.ArrayList#addAll(int, java.util.Collection)
-	 */
-	@Override
-	public boolean addAll(int pIndex, Collection<? extends XY> pCol) {
-		boolean added = true;
-		for (XY xy : pCol) {
-			if (xy == null || mMaxCount <= super.size()) {
-				added = false;
-				break;
-			}
-			super.add(pIndex, xy);
+	public void add(int index, XY element) {
+		if (element != null && size() < mMaxCount) {
+			super.add(index, element);
 		}
-		return added;
 	}
 
-	/**
-	 * @see java.util.ArrayList#set(int, java.lang.Object)
-	 */
 	@Override
-	public XY set(int pIndex, XY pXY) {
-		XY xy = super.remove(pIndex);
-		if (this.addAll(pIndex, Arrays.asList(new XY[] { pXY }))) {
-			return xy;
+	public boolean addAll(Collection<? extends XY> c) {
+		return addAll(size(), c);
+	}
+
+	@Override
+	public boolean addAll(int index, Collection<? extends XY> c) {
+		if (c != null) {
+			int limit = mMaxCount - size();
+			return super.addAll(index, c.stream().filter(e -> e != null).limit(limit).collect(Collectors.toList()));
 		} else {
-			super.set(pIndex, xy); // roll back
-			return null;
+			return false;
 		}
 	}
 

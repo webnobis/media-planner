@@ -16,4 +16,6 @@ module com.webnobis.mediaplanner {
 	uses java.awt.Toolkit;
 	uses javax.xml.bind.JAXB;
 	
+	opens test.com.webnobis.mediaplanner.element.util;
+	
 }

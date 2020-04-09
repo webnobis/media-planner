@@ -31,15 +31,12 @@ class DescriptionListTest {
 
 	private DescriptionList mList;
 
-	private DescriptionList mListAllKeys;
-
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
 		mList = new DescriptionList(KEYS.length, KEYS);
-		mListAllKeys = new DescriptionList(KEYS.length, new String[0]);
 	}
 
 	/**
@@ -131,9 +128,6 @@ class DescriptionListTest {
 		assertFalse(mList.add(null));
 		mList.add(0, null);
 		assertTrue(mList.isEmpty());
-		assertFalse(mListAllKeys.add(null));
-		mListAllKeys.add(0, null);
-		assertTrue(mListAllKeys.isEmpty());
 	}
 
 	/**
@@ -146,8 +140,6 @@ class DescriptionListTest {
 	void testAddNotAllowed() {
 		assertFalse(mList.add(NOT_ALLOWED));
 		assertTrue(mList.isEmpty());
-		assertTrue(mListAllKeys.add(NOT_ALLOWED));
-		assertTrue(mListAllKeys.contains(NOT_ALLOWED));
 	}
 
 }

@@ -3,18 +3,14 @@
  */
 package test.com.webnobis.mediaplanner.element.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.webnobis.mediaplanner.element.XY;
 import com.webnobis.mediaplanner.element.util.PositionList;
@@ -23,108 +19,102 @@ import com.webnobis.mediaplanner.element.util.PositionList;
  * @author steffen
  * @version 1.00
  */
-@RunWith(Theories.class)
-public class PositionListTest {
+class PositionListTest {
 
-	private static final XY FIRST = new XY(7, 7);
-
-	@DataPoints
-	public static final XY[] sElements = { new XY(0, 0), new XY(9, -88), new XY(Integer.MIN_VALUE, Integer.MAX_VALUE) };
+	private static final XY[] sElements = { new XY(0, 0), new XY(9, -88), new XY(Integer.MIN_VALUE, Integer.MAX_VALUE),
+			new XY(-1111, -1111111111) };
 
 	private PositionList mList;
 
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@Before
-	public void setUp() throws Exception {
+	@BeforeEach
+	void setUp() throws Exception {
 		mList = new PositionList(sElements.length);
 	}
 
 	/**
-	 * Test method for {@link com.webnobis.mediaplanner.element.util.PositionList#getMaxCount()}.
+	 * Test method for
+	 * {@link com.webnobis.mediaplanner.element.util.PositionList#getMaxCount()}.
 	 */
 	@Test
-	public void testGetMaxCount() {
+	void testGetMaxCount() {
 		assertEquals(sElements.length, mList.getMaxCount());
 	}
 
 	/**
-	 * Test method for {@link com.webnobis.mediaplanner.element.util.PositionList#add(XY)}.
-	 */
-	@Theory
-	public void testAddEndXY(XY pXY) {
-		assertTrue(mList.add(FIRST));
-		assertTrue(mList.add(pXY));
-		assertEquals(2, mList.size());
-		assertEquals(FIRST, mList.get(0));
-		assertEquals(pXY, mList.get(1));
-	}
-
-	/**
-	 * Test method for {@link com.webnobis.mediaplanner.element.util.PositionList#add(int, XY)}.
-	 */
-	@Theory
-	public void testAddStartXY(XY pXY) {
-		mList.add(0, FIRST);
-		mList.add(0, pXY);
-		assertEquals(2, mList.size());
-		assertEquals(FIRST, mList.get(1));
-		assertEquals(pXY, mList.get(0));
-	}
-
-	/**
-	 * Test method for {@link com.webnobis.mediaplanner.element.util.PositionList#addAll(java.util.Collection)}.
+	 * Test method for
+	 * {@link com.webnobis.mediaplanner.element.util.PositionList#add(XY)}.
 	 */
 	@Test
-	public void testAddAllEndXY() {
+	void testAddEndXY() {
+		assertTrue(mList.add(sElements[2]));
+		assertTrue(mList.add(sElements[0]));
+		assertEquals(2, mList.size());
+		assertEquals(sElements[2], mList.get(0));
+		assertEquals(sElements[0], mList.get(1));
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.webnobis.mediaplanner.element.util.PositionList#add(int, XY)}.
+	 */
+	@Test
+	void testAddStartXY(XY pXY) {
+		mList.add(0, sElements[3]);
+		mList.add(0, sElements[1]);
+		assertEquals(2, mList.size());
+		assertEquals(sElements[1], mList.get(0));
+		assertEquals(sElements[3], mList.get(1));
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.webnobis.mediaplanner.element.util.PositionList#addAll(java.util.Collection)}.
+	 */
+	@Test
+	void testAddAllEndXY() {
 		assertTrue(mList.addAll(Arrays.asList(sElements)));
 		assertEquals(mList.getMaxCount(), mList.size());
-		assertFalse(mList.add(FIRST));
-		assertFalse(mList.contains(FIRST));
+		assertTrue(mList.contains(sElements[0]));
+		assertFalse(mList.add(sElements[0]));
 		assertEquals(mList.getMaxCount(), mList.size());
 	}
 
 	/**
-	 * Test method for {@link com.webnobis.mediaplanner.element.util.PositionList#addAll(int, java.util.Collection)}.
+	 * Test method for
+	 * {@link com.webnobis.mediaplanner.element.util.PositionList#addAll(int, java.util.Collection)}.
 	 */
 	@Test
-	public void testAddAllStartXY() {
-		assertTrue(mList.add(FIRST));
-		assertTrue(mList.contains(FIRST));
-		assertFalse(mList.addAll(0, Arrays.asList(sElements)));
+	void testAddAllStartXY() {
+		assertTrue(mList.add(sElements[1]));
+		assertTrue(mList.contains(sElements[1]));
+		assertTrue(mList.addAll(0, Arrays.asList(sElements)));
 		assertEquals(mList.getMaxCount(), mList.size());
-		mList.clear();
-		assertTrue(mList.add(FIRST));
-		assertTrue(mList.contains(FIRST));
-		XY[] part = new XY[sElements.length - 1];
-		System.arraycopy(sElements, 0, part, 0, part.length);
-		assertTrue(mList.addAll(0, Arrays.asList(part)));
-		assertEquals(mList.getMaxCount(), mList.size());
-		assertFalse(mList.add(FIRST));
-		assertTrue(mList.contains(FIRST));
-		assertEquals(mList.getMaxCount(), mList.size());
-		assertEquals(FIRST, mList.get(mList.size() - 1));
+		assertTrue(mList.contains(sElements[1]));
+		assertEquals(sElements[1], mList.get(mList.size() - 1));
 	}
 
 	/**
-	 * Test method for {@link com.webnobis.mediaplanner.element.util.PositionList#set(int, XY)}.
+	 * Test method for
+	 * {@link com.webnobis.mediaplanner.element.util.PositionList#set(int, XY)}.
 	 */
-	@Theory
-	public void testSetXY(XY pXY) {
-		for (int i = 0; i < sElements.length; i++) {
-			mList.add(FIRST);
-		}
-		assertEquals(FIRST, mList.set(2, pXY));
+	@Test
+	void testSetXY() {
+		mList.addAll(Arrays.asList(sElements));
+		assertEquals(sElements[2], mList.set(2, sElements[0]));
 		assertEquals(sElements.length, mList.size());
-		assertEquals(pXY, mList.get(2));
+		assertEquals(sElements[0], mList.get(2));
 	}
 
 	/**
-	 * Test method for {@link com.webnobis.mediaplanner.element.util.PositionList#add(XY)} and {@link com.webnobis.mediaplanner.element.util.PositionList#add(int, XY)}.
+	 * Test method for
+	 * {@link com.webnobis.mediaplanner.element.util.PositionList#add(XY)} and
+	 * {@link com.webnobis.mediaplanner.element.util.PositionList#add(int, XY)}.
 	 */
 	@Test
-	public void testAddNull() {
+	void testAddNull() {
 		assertFalse(mList.add(null));
 		mList.add(0, null);
 		assertTrue(mList.isEmpty());
