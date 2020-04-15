@@ -3,6 +3,7 @@
  */
 package test.com.webnobis.mediaplanner.sheet.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,8 +14,10 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,46 +41,34 @@ class SheetTransformerXmlTest {
 
 	public static final String TMP_FILE_EXT = ".tmp";
 
-	private static final ElementList[] sElementLists = new ElementList[10];
+	private static ElementList sElementList;
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@BeforeAll
 	static void setUpClass() throws Exception {
-		int x = 0;
-		int y = 0;
-		Element element;
-		List<Element> elements;
-		for (int i = 0; i < sElementLists.length; i++) {
-			sElementLists[i] = new ElementList();
-			elements = PaletteUtil.getElements(Palette.POWER);
-			while (i >= elements.size()) {
-				elements.addAll(PaletteUtil.getElements(Palette.POWER));
+		sElementList = new ElementList();
+
+		AtomicInteger x = new AtomicInteger();
+		AtomicInteger y = new AtomicInteger();
+		EnumSet.allOf(Palette.class).stream().map(PaletteUtil::getElements).flatMap(List::stream).map(element -> {
+			element.getPositions().add(new XY(x.getAndUpdate(i -> i + 2), y.getAndUpdate(i -> i + 3)));
+			element.getPositions().add(new XY(x.getAndUpdate(i -> i + 2), y.getAndUpdate(i -> i + 4)));
+			if (element.isLine()) {
+				element.getPositions().add(new XY(x.getAndUpdate(i -> i + 2), y.getAndUpdate(i -> i + 5)));
 			}
-			x = (i * 1000);
-			y = x;
-			for (int j = 0; j < i; j++) {
-				x += 7;
-				y += 7;
-				element = elements.get(j);
-				element.getPositions().add(new XY(x, y));
-				element.getPositions().add(new XY(x + 2, y + 2));
-				if (element.isLine()) {
-					element.getPositions().add(new XY(x + 4, y + 4));
-				}
-				if (element.isTwistable()) {
-					element.setDirection(Direction.values()[i % Direction.values().length]);
-				}
-				if (element.isDescribable()) {
-					Describable d = element.getClass().getAnnotation(Describable.class);
-					for (String key : d.allowedKeys()) {
-						element.getDescriptions().add(new Description(key, String.valueOf(d.maxCount())));
-					}
-				}
-				assertTrue(sElementLists[i].add(element));
+			if (element.isTwistable()) {
+				element.setDirection(Direction.SOUTH);
 			}
-		}
+			if (element.isDescribable()) {
+				Describable d = element.getClass().getAnnotation(Describable.class);
+				for (String key : d.allowedKeys()) {
+					element.getDescriptions().add(new Description(key, UUID.randomUUID().toString()));
+				}
+			}
+			return element;
+		}).forEach(sElementList::add);
 	}
 
 	@AfterAll
@@ -94,16 +85,14 @@ class SheetTransformerXmlTest {
 	 */
 	@Test
 	void testStoreElements() {
-		Arrays.stream(sElementLists).forEach(pElementList -> {
-			try {
-				File sXmlFile = File.createTempFile(SheetTransformerXmlTest.class.getSimpleName(), TMP_FILE_EXT);
-				sXmlFile = SheetTransformer.storeElements(new TestComponent(), pElementList, sXmlFile);
-				assertTrue(sXmlFile.length() > 0);
-				testLoadElements(sXmlFile);
-			} catch (IOException e) {
-				throw new UncheckedIOException(e);
-			}
-		});
+		try {
+			File sXmlFile = File.createTempFile(SheetTransformerXmlTest.class.getSimpleName(), TMP_FILE_EXT);
+			sXmlFile = SheetTransformer.storeElements(new TestComponent(), sElementList, sXmlFile);
+			assertTrue(sXmlFile.length() > 0);
+			testLoadElements(sXmlFile);
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 
 	/**
@@ -118,14 +107,7 @@ class SheetTransformerXmlTest {
 		for (Element element : SheetTransformer.loadElements(pXmlFile).getElements()) {
 			elementList.add(element);
 		}
-		boolean found = false;
-		for (int i = 0; i < sElementLists.length; i++) {
-			if (sElementLists[i].equals(elementList)) {
-				found = true;
-				break;
-			}
-		}
-		assertTrue(found);
+		assertEquals(sElementList, elementList);
 	}
 
 	@Test

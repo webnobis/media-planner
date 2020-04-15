@@ -82,7 +82,7 @@ public class PaintUtil {
 	public static Element createFrom(Element pElement, int pX, int pY, boolean pRastered) throws ElementException {
 		if (isPaintable(pElement)) {
 			try {
-				Element element = pElement.getClass().newInstance();
+				Element element = pElement.getClass().getDeclaredConstructor().newInstance();
 				int x;
 				int y;
 				if (pRastered) {

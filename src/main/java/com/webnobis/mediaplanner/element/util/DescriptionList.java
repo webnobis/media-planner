@@ -25,7 +25,7 @@ public class DescriptionList extends ArrayList<Description> {
 	 * @param pAllowedKeys
 	 */
 	public DescriptionList(int pMaxCount, String[] pAllowedKeys) {
-		super(pMaxCount);
+		super(Math.min(5, pMaxCount));
 		mMaxCount = pMaxCount;
 		mAllowedKeys = Optional.ofNullable(pAllowedKeys).map(Arrays::asList).orElse(Collections.emptyList());
 	}

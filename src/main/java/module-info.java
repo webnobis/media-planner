@@ -12,10 +12,11 @@ module com.webnobis.mediaplanner {
 	requires javafx.swing;
 
 	exports com.webnobis.mediaplanner;
+	exports com.webnobis.mediaplanner.element;
 	
 	uses java.awt.Toolkit;
 	uses javax.xml.bind.JAXB;
 	
-	opens test.com.webnobis.mediaplanner.element.util;
+	opens com.webnobis.mediaplanner.sheet.util to java.xml.bind;
 	
 }

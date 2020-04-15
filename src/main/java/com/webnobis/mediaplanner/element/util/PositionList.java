@@ -18,7 +18,7 @@ public class PositionList extends ArrayList<XY> {
 	 * @param pMaxCount
 	 */
 	public PositionList(int pMaxCount) {
-		super(pMaxCount);
+		super(Math.min(10, pMaxCount));
 		mMaxCount = pMaxCount;
 	}
 
