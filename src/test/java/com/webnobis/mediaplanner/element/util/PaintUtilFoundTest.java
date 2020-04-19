@@ -1,4 +1,4 @@
-package test.com.webnobis.mediaplanner.element.util;
+package com.webnobis.mediaplanner.element.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

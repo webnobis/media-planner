@@ -1,7 +1,7 @@
 /**
  * 
  */
-package test.com.webnobis.mediaplanner.sheet.util;
+package com.webnobis.mediaplanner.sheet.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

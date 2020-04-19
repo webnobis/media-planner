@@ -1,7 +1,7 @@
 /**
  * 
  */
-package test.com.webnobis.mediaplanner.element.util;
+package com.webnobis.mediaplanner.element.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -61,7 +61,7 @@ class PositionListTest {
 	 * {@link com.webnobis.mediaplanner.element.util.PositionList#add(int, XY)}.
 	 */
 	@Test
-	void testAddStartXY(XY pXY) {
+	void testAddStartXY() {
 		mList.add(0, sElements[3]);
 		mList.add(0, sElements[1]);
 		assertEquals(2, mList.size());
