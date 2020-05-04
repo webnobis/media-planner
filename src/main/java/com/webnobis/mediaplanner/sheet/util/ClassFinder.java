@@ -10,7 +10,12 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ClassFinder {
+
+	private static final Logger sLog = LoggerFactory.getLogger(ClassFinder.class);
 
 	private static final char PATH = '/';
 
@@ -67,7 +72,9 @@ public class ClassFinder {
 		Set<String> classNames = new HashSet<String>();
 		String packageName = pPackage.getName();
 		String packagePath = packageName.replace(DOT, PATH);
+		sLog.debug("read package path " + packagePath);
 		String classPath = System.getProperty("jdk.module.path");
+		sLog.debug("search within module class path " + classPath);
 		if (classPath.contains(File.pathSeparator)) {
 			for (String path : classPath.split(File.pathSeparator)) {
 				addClassesFromPackage(path, packagePath, packageName, classNames);
