@@ -1,10 +1,11 @@
 package com.webnobis.mediaplanner.sheet.util;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.JarEntry;
@@ -25,50 +26,7 @@ public class ClassFinder {
 
 	private static final String CLASS_FILE_EXT = DOT + "class";
 
-	private static void addClassesFromPackage(String pClassPath, String pPackagePath, String pPackageName, Set<String> pClassNames) throws IOException {
-		if (pClassPath.endsWith(JAR_FILE_EXT)) {
-			addClassesFromPackageInJar(pClassPath, pPackagePath, pPackageName, pClassNames);
-			return;
-		}
-		File packageFile = new File(pClassPath + PATH + pPackagePath);
-		if (!packageFile.exists()) {
-			return;
-		}
-		String className;
-		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new InputStreamReader(packageFile.toURI().toURL().openStream()));
-			while (in.ready()) {
-				className = in.readLine();
-				pClassNames.add(pPackageName + '.' + className.substring(0, className.lastIndexOf(DOT)));
-			}
-		} finally {
-			if (in != null) {
-				in.close();
-			}
-		}
-	}
-
-	private static void addClassesFromPackageInJar(String pClassPath, String pPackagePath, String pPackageName, Set<String> pClassNames) throws IOException {
-		JarInputStream in = null;
-		try {
-			in = new JarInputStream(new FileInputStream(pClassPath));
-			String className;
-			JarEntry entry;
-			while ((entry = in.getNextJarEntry()) != null) {
-				if (entry.getName().endsWith(CLASS_FILE_EXT) && entry.getName().startsWith(pPackagePath)) {
-					className = entry.getName().replace(PATH, DOT);
-					pClassNames.add(className.substring(0, className.lastIndexOf(DOT)));
-				}
-			}
-		} finally {
-			if (in != null) {
-				in.close();
-			}
-		}
-	}
-
-	public static Set<String> getAllClassNames(Package pPackage) throws IOException {
+	public static Set<String> getAllClassNames(Package pPackage) {
 		Set<String> classNames = new HashSet<String>();
 		String packageName = pPackage.getName();
 		String packagePath = packageName.replace(DOT, PATH);
@@ -77,12 +35,48 @@ public class ClassFinder {
 		sLog.debug("search within module class path " + classPath);
 		if (classPath.contains(File.pathSeparator)) {
 			for (String path : classPath.split(File.pathSeparator)) {
-				addClassesFromPackage(path, packagePath, packageName, classNames);
+				Path cp = Paths.get(path);
+				try {
+					Files.walk(cp).filter(Files::isRegularFile)
+							.forEach(p -> addClassesFromPackage(cp, p, packagePath, packageName, classNames));
+				} catch (IOException e) {
+					throw new UncheckedIOException(e);
+				}
 			}
 		} else {
-			addClassesFromPackage(classPath, packagePath, packageName, classNames);
+			Path cp = Paths.get(classPath);
+			addClassesFromPackage(cp, cp, packagePath, packageName, classNames);
 		}
 		return classNames;
+	}
+
+	private static void addClassesFromPackage(Path pClassPath, Path pPath, String pPackagePath, String pPackageName,
+			Set<String> pClassNames) {
+		String name = pPath.toString();
+		if (name.endsWith(JAR_FILE_EXT)) {
+			addClassesFromPackageFromJar(pPath, pPackagePath, pClassNames);
+			return;
+		}
+
+		if (name.endsWith(CLASS_FILE_EXT)) {
+			String className = pClassPath.relativize(pPath).toString().replace(PATH, DOT);
+			pClassNames.add(className.substring(0, className.lastIndexOf(DOT)));
+		}
+	}
+
+	private static void addClassesFromPackageFromJar(Path pClassPath, String pPackagePath, Set<String> pClassNames) {
+		try (JarInputStream in = new JarInputStream(Files.newInputStream(pClassPath))) {
+			String className;
+			JarEntry entry;
+			while ((entry = in.getNextJarEntry()) != null) {
+				if (entry.getName().endsWith(CLASS_FILE_EXT) && entry.getName().startsWith(pPackagePath)) {
+					className = entry.getName().replace(PATH, DOT);
+					pClassNames.add(className.substring(0, className.lastIndexOf(DOT)));
+				}
+			}
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 
 }

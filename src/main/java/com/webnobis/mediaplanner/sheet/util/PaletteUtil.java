@@ -41,6 +41,9 @@ public abstract class PaletteUtil {
 		Class<?> c;
 		Group group;
 		for (String className : ClassFinder.getAllClassNames(Group.class.getPackage())) {
+			if (!className.matches("^.*\\.[A-Z].*$")) {
+				continue;
+			}
 			try {
 				c = Class.forName(className);
 				if (c.isAnnotationPresent(Group.class) && Element.class.isAssignableFrom(c)) {
