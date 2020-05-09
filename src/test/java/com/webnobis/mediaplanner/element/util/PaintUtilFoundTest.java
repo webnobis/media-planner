@@ -10,7 +10,6 @@ import com.webnobis.mediaplanner.element.AbstractElement;
 import com.webnobis.mediaplanner.element.Element;
 import com.webnobis.mediaplanner.element.Line;
 import com.webnobis.mediaplanner.element.XY;
-import com.webnobis.mediaplanner.element.util.PaintUtil;
 import com.webnobis.mediaplanner.sheet.util.Constants;
 
 /**

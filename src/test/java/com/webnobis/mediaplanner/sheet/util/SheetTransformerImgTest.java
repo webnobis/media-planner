@@ -25,9 +25,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.webnobis.mediaplanner.sheet.util.Constants;
-import com.webnobis.mediaplanner.sheet.util.SheetTransformer;
-
 /**
  * @author steffen
  * @version 1.00

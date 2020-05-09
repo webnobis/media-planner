@@ -28,10 +28,6 @@ import com.webnobis.mediaplanner.element.Description;
 import com.webnobis.mediaplanner.element.Direction;
 import com.webnobis.mediaplanner.element.Element;
 import com.webnobis.mediaplanner.element.XY;
-import com.webnobis.mediaplanner.sheet.util.ElementList;
-import com.webnobis.mediaplanner.sheet.util.Palette;
-import com.webnobis.mediaplanner.sheet.util.PaletteUtil;
-import com.webnobis.mediaplanner.sheet.util.SheetTransformer;
 
 /**
  * @author steffen
