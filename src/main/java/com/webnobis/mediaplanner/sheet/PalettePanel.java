@@ -6,7 +6,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webnobis.mediaplanner.element.Element;
 import com.webnobis.mediaplanner.element.XY;
@@ -18,7 +19,7 @@ public class PalettePanel extends JPanel implements PaletteService {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger sLog = Logger.getLogger(PalettePanel.class);
+	private static final Logger sLog = LoggerFactory.getLogger(PalettePanel.class);
 
 	private final ElementList mPaletteElements;
 

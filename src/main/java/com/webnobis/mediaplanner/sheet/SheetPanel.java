@@ -10,7 +10,8 @@ import java.io.PrintWriter;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webnobis.mediaplanner.element.Element;
 import com.webnobis.mediaplanner.sheet.util.Constants;
@@ -22,7 +23,7 @@ public class SheetPanel extends JPanel implements SheetService {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger sLog = Logger.getLogger(SheetPanel.class);
+	private static final Logger sLog = LoggerFactory.getLogger(SheetPanel.class);
 
 	private final ElementList mSheetElements;
 

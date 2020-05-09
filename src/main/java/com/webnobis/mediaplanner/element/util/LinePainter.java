@@ -4,7 +4,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.webnobis.mediaplanner.element.AbstractLine;
 import com.webnobis.mediaplanner.element.Description;
@@ -22,7 +23,7 @@ public class LinePainter {
 
 	protected static final String LINE_CROSS = "//";
 
-	private static final Logger sLog = Logger.getLogger(LinePainter.class);
+	private static final Logger sLog = LoggerFactory.getLogger(LinePainter.class);
 
 	public static void paint(AbstractLine pLine, Graphics2D pGraphics) {
 		if (PaintUtil.isPaintable(pLine) && pLine.isLine()) {

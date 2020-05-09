@@ -9,8 +9,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import com.webnobis.mediaplanner.element.Element;
-import com.webnobis.mediaplanner.sheet.util.PopUpMenuAction;
 import com.webnobis.mediaplanner.sheet.util.Msg;
+import com.webnobis.mediaplanner.sheet.util.PopUpMenuAction;
 
 /**
  * @author steffen
