@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.webnobis.mediaplanner.element.Description;
-import com.webnobis.mediaplanner.element.util.DescriptionList;
 
 /**
  * @author steffen
