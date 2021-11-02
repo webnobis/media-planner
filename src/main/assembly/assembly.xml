@@ -1,12 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <assembly>
-    <id>bin</id>
-    <!-- Generates a zip package containing the needed files -->
-    <formats>
-        <format>zip</format>
-        <format>tar.gz</format>
-    </formats>
+	<id>bin</id>
+	<!-- Generates a zip package containing the needed files -->
+	<formats>
+		<format>zip</format>
+		<format>tar.gz</format>
+	</formats>
 
-    <fileSets>
+	<fileSets>
 		<fileSet>
 			<directory>${project.build.directory}/modules</directory>
 			<outputDirectory>modules</outputDirectory>
@@ -14,7 +15,8 @@
 				<include>*.jar</include>
 			</includes>
 			<excludes>
-				<exclude>log4j-*.jar</exclude>
+				<exclude>log4j-api*.jar</exclude>
+				<exclude>log4j-core*.jar</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
@@ -22,23 +24,31 @@
 			<directory>${project.build.directory}/modules</directory>
 			<outputDirectory>lib</outputDirectory>
 			<includes>
-				<include>log4j-*.jar</include>
+				<include>log4j-api*.jar</include>
+				<include>log4j-core*.jar</include>
 			</includes>
 		</fileSet>
-        <fileSet>
-            <directory>${project.build.directory}</directory>
-            <outputDirectory></outputDirectory>
-            <includes>
-                <include>start.bat</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>${project.build.directory}</directory>
-            <outputDirectory></outputDirectory>
-            <includes>
-                <include>start.sh</include>
-            </includes>
-            <fileMode>0755</fileMode>
-        </fileSet>
-    </fileSets>
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>start.bat</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>start.sh</include>
+			</includes>
+			<fileMode>0755</fileMode>
+		</fileSet>
+		<fileSet>
+			<directory>config</directory>
+			<outputDirectory>config</outputDirectory>
+			<includes>
+				<include>config.properties</include>
+			</includes>
+		</fileSet>
+	</fileSets>
 </assembly>
