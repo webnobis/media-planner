@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.webnobis.mediaplanner</groupId>
 	<artifactId>media-planner</artifactId>
-	<version>2.0.3-SNAPSHOT</version>
+	<version>2.0.4-SNAPSHOT</version>
 	<name>Media Planner</name>
 	<description>Media Planner</description>
 
@@ -199,7 +199,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M6</version>
+				<version>3.0.0-M7</version>
 				<configuration>
 					<argLine>--add-opens
 						${project.module}/${project.module}=ALL-UNNAMED
@@ -218,7 +218,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>3.0.0-M6</version>
+				<version>3.0.0-M7</version>
 				<configuration>
 					<outputDirectory>target/surefire-report-site</outputDirectory>
 					<linkXRef>false</linkXRef>
